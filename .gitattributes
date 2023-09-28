@@ -1,0 +1,8 @@
+# Set LF line endings for specific files
+*.js text eol=lf
+
+# Set CRLF line endings for specific files
+*.txt text eol=crlf
+
+# Automatically normalize all other files to LF
+* text=auto
