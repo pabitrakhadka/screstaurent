@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import multer from "multer";
 
-//Define the destination directory for uploads
+// Define the destination directory for uploads
 const uploadDirectory = "/tmp/uploads";
 const storage = multer.diskStorage({
     destination: uploadDirectory,
