@@ -11,8 +11,9 @@ export default NextAuth({
       name: "Credentials",
       async authorize(credentials, req) {
         try {
+          console.log("loging");
           const { email, password } = credentials;
-          const res = await axios.post('http://screstaurent.vercel.app/api/login', { email, password });
+          const res = await axios.post('https://screstaurent.vercel.app/login', { email, password });
 
           if (res.data.status) {
             console.log("res:", res.data.result);
