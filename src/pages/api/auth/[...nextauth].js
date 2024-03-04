@@ -24,7 +24,7 @@ export default NextAuth({
           const { email, password ,loginType} = credentials;
           const url =process.env.AUTH_URL;
          
-          console.log("Url",url);
+         
           if (loginType === "user") {
             const res = await axios.post(`${url}/userlogin`, { email, password });
             if (res.status === 200) {
@@ -45,7 +45,7 @@ export default NextAuth({
               admin.name = admin.name;
               return admin;
             } else {
-              console.log("else retur null");
+             
               return null;
             }
           }

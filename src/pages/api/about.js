@@ -18,7 +18,7 @@ export default async function handler(req,res){
                     message:message
                 }
             });
-            return res.status(200).json({ message:"Successful Send Message"});
+            return res.status(200).json({ message:"Successful Send Message"},addContact);
         }else if(req.method=="GET"){
             const data=await prisma.contact.findMany();
             if(!data||data.length<=0)
@@ -41,6 +41,7 @@ export default async function handler(req,res){
             }
         }
     } catch (error) {
-        
+        console.error("Error:", error);  
+        return res.status(500).json({ message: "Internal Server Error", error: error });  
     }
 }
