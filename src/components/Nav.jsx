@@ -25,7 +25,7 @@ const Nav = () => {
 
         <div className="container-fluid">
           <button
-            className="navbar-toggler "
+            className="navbar-toggler-white"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarTogglerDemo01"

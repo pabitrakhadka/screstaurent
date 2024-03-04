@@ -22,8 +22,9 @@ export default NextAuth({
       async authorize(credentials, req) {
         try {
           const { email, password ,loginType} = credentials;
-          const url = "http://localhost:3000/api";
+          const url =process.env.AUTH_URL;
          
+          console.log("Url",url);
           if (loginType === "user") {
             const res = await axios.post(`${url}/userlogin`, { email, password });
             if (res.status === 200) {
