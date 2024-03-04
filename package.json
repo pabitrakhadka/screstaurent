@@ -2,7 +2,6 @@
   "name": "restaurent",
   "version": "0.1.0",
   "private": true,
-  "proxy":"http://localhost:3000",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -42,9 +41,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
