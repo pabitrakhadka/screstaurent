@@ -5,10 +5,10 @@ import Link from "next/link";
 const order = () => {
   const [order, setOrder] = useState();
   const loadData = async () => {
-    const res = await axios.get("/api/orders");
+    const res = await axios.get("/api/order");
     // console.log(res.data);
-    if (res.data.status) {
-      setOrder(res.data.result);
+    if (res.status===200) {
+      setOrder(res.data);
     }
   };
   useEffect(() => {
@@ -42,7 +42,7 @@ const order = () => {
                 <td>{index + 1}</td>
                 <td>{item.menu_id}</td>
                 <td>{item.user_id}</td>
-                <td>Rs. {item.price}</td>
+                <td>Rs.{item.price}</td>
                 <td>{item.quantity}</td>
                 <td>{item.date}</td>
                 <td>{item.token_num}</td>

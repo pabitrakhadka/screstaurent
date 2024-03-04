@@ -12,8 +12,8 @@ const contact_details = () => {
     e.preventDefault();
     const text = 'Can You Delete ?';
     if (confirm(text) == true) {
-      const res = await axios.delete(`http://localhost:3000/api/conatcts?id=${id}`)
-      if (res.data.status) {
+      const res = await axios.delete(`http://localhost:3000/api/about?id=${id}`)
+      if (res.status===200) {
         toast.success(`${res.data.message}`, {
           position: "top-right",
           autoClose: 1000,
@@ -42,9 +42,9 @@ const contact_details = () => {
   }
   const [contact, setContact] = useState([]);
   const loadContact = async () => {
-    const res = await axios.get("/api/conatcts");
-    if (res.data.success) {
-      setContact(res.data.result);
+    const res = await axios.get("/api/about");
+    if (res.status===200) {
+      setContact(res.data);
     }
   };
   useEffect(() => {

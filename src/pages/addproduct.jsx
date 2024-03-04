@@ -4,15 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// /api/menu/ //all menu return  ( get) 
-// /api/menu/id // => menu with id  ( get)
-// /api/menu/id/delete/ =>  (post)
-// /api/menus=/new/(post)
+ 
 
 const addproduct = () => {
   const router = useRouter();
   const { id } = router.query || null;
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -26,16 +23,16 @@ const addproduct = () => {
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
-        console.log('idddd', id);
-        const res = await axios.get(`/api/products?id=${id}`);
+         
+        const res = await axios.get(`/api/product?id=${id}`);
 
-        if (res && res.data.status && res.data.result[0]) {
-          setProductName(res.data.result[0].name
+        if (res && res.status===200 && res.data) {
+          setProductName(res.data.name
           );
-          setPrice(res.data.result[0].price);
-          setDescription(res.data.result[0].description);
-          setImage(res.data.result[0].image);
-          setCategory(res.data.result[0].category
+          setPrice(res.data.price);
+          setDescription(res.data.description);
+          setImage(res.data.image);
+          setCategory(res.data.category
           )
         }
       };
@@ -47,7 +44,7 @@ const addproduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = `/api/products`;
+    const url = `/api/product`;
     const data = new FormData();
     data.append("name", productName);
     data.append("price", price);
@@ -60,7 +57,7 @@ const addproduct = () => {
       let res; // declare res variable outside if block
 
       if (method === "put") {
-        res = await axios.put(`/api/products?id=${id}`, data, {
+        res = await axios.put(`/api/product?id=${id}`, data, {
           headers: {
             "content-type": "multipart/form-data",
           },
@@ -73,8 +70,8 @@ const addproduct = () => {
           },
         });
       }
-      console.log(data);
-      if (res.data.status) {
+      
+      if (res.status===200) {
         toast.success(`${res.data.message}`, {
           position: "top-right",
           autoClose: 1000,

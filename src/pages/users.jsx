@@ -7,10 +7,11 @@ const users = () => {
 
   const loadData = async () => {
     try {
-      const res = await axios.get("/api/users");
+      const res = await axios.get("/api/user");
       // setData(res.data.users);
-      if (res.data.status) {
-        setData(res.data.result);
+      if (res.status===200) {
+        console.log(res.data.user);
+        setData(res.data);
       }
       // setData(res.data.data.users);
     } catch (errror) {
@@ -37,23 +38,22 @@ const users = () => {
             </tr>
           </thead>
           <tbody>
-            {data && data.length > 0 ? (
-              data.map((user, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{user.user_name}</td>
-                  <td>{user.user_phone}</td>
-                  <td>{user.user_email}</td>
-                  <td>{user.user_address}</td>
-                  <td>**********</td>
-
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">No data available</td>
-              </tr>
-            )}
+          {data && data.length > 0 ? (
+    data.map((user, index) => (
+        <tr key={index}>
+            <td>{index + 1}</td>
+            <td>{user.user_name}</td>
+            <td>{user.user_phone}</td>
+            <td>{user.user_email}</td>
+            <td>{user.user_address}</td>
+            <td>**********</td>
+        </tr>
+    ))
+) : (
+    <tr>
+        <td colSpan="5">No data available</td>
+    </tr>
+)}
           </tbody>
         </table>
       </div>

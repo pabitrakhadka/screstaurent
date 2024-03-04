@@ -26,11 +26,11 @@ const About = () => {
       validationSchema: contactform,
       onSubmit: async (values) => {
         const res = await axios.post(
-          "/api/conatcts",
+          "/api/about",
           values
         );
 
-        if (res.data.status) {
+        if (res.status===200) {
 
           toast.success(`Thanks You For feed Back`, {
             position: "top-right",
@@ -41,10 +41,14 @@ const About = () => {
             draggable: false,
             theme: "colored",
 
-          })
-          setTimeout(() => {
-            router.push('/about');
-          })
+          });
+          values.name="";
+          values.email="";
+          values.subject="";
+          values.message="";
+
+
+          
         } else {
           toast.error(`${res.data.message}`, {
             position: "top-right",

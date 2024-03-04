@@ -50,10 +50,10 @@ export default function Home() {
   const [specialMenu, setSpecialMenu] = useState([]);
   const loadData = async () => {
     try {
-      const res = await axios.get("/api/products");
-      if (res.data.status) {
-        // console.log(res.data);
-        setSpecialMenu(res.data.result);
+      const res = await axios.get("/api/product");
+      if (res.status===200) {
+        
+        setSpecialMenu(res.data);
       }
     } catch (error) {
       console.log(error);

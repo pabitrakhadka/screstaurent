@@ -19,17 +19,16 @@ const addAdmin = () => {
   }, [id])
   const loadEditData = async (id) => {
     const res = await axios.get(`/api/admin?id=${id}`);
-    console.log("display admin:", res.data);
-    if (res.data.status) {
-      const adminData = res.data.result[0];
+    
+    if (res.status===200) {
+      const adminData = res.data.data[0];
+       console.log(adminData.name);
       setAdmin({
         name: adminData.name,
         email: adminData.email,
         phone: adminData.phone,
-        password: admin.password, // Make sure to include other properties as needed
+         
       });
-
-
     }
   };
   const [admin, setAdmin] = useState({

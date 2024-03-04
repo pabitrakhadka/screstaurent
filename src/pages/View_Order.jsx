@@ -10,15 +10,20 @@ const View_Order = () => {
 
     const [orderData, setOrderData] = useState([]);
     const [status, setStatus] = useState("");
+    const [total, setTotal] = useState("");
+
     const router = useRouter();
     const token_num = router.query.token_num;
     const user_id = router.query.user_id;
 
-    const updateOrderStatus = async (e, token_num, user_id) => {
+    
+    const updateOrderStatus = async (e,user_id, token_num) => {
         e.preventDefault();
-        const res = await axios.put('/api/orders', { user_id, token_num, status });
-        console.log(" user Id status:", user_id, token_num, status);
-        if (res.data.status) {
+        console.log(" user_id, token, status:",user_id, token_num, status);
+        const res = await axios.put(`/api/order?user_id=${user_id}&token_num=${token_num}`, {status });
+        
+         
+        if (res.status===200) {
             toast.success(`${res.data.message}`, {
                 position: "top-right",
                 autoClose: 1000,
@@ -54,20 +59,27 @@ const View_Order = () => {
 
     useEffect(() => {
 
-        if (user_id && token_num) {
+        if (token_num && user_id) {
             loadData();
 
         }
 
-    }, [user_id]);
+    }, [token_num && user_id]);
 
     const loadData = async () => {
-        const res = await axios.get(`/api/SeeOrder?user_id=${user_id}&token_num=${token_num}`);
-
-        console.log("View Data", res.data);
-        if (res.data.status) {
-            setOrderData(res.data.result);
-            setStatus(res.data.result[0].status);
+        const res = await axios.get(`/api/order?user_id=${user_id}&token_num=${token_num}`);
+       
+        if (res.status===200) {
+            console.log(res.data);
+            setOrderData(res.data);
+            setStatus(res.data.status);
+            let totalPrice = 0;
+            res.data.forEach((item) => {
+                totalPrice += parseFloat(item.price); // Assuming price is in number format
+            });
+            setTotal(totalPrice);
+           
+           
         }
     };
 
@@ -93,21 +105,22 @@ const View_Order = () => {
                         </thead>
                         <tbody>
                             {orderData.map((item, index) => (
+                            
                                 <tr key={index}>
-                                    <td>{item.user_name}</td>
-                                    <td>{item.user_phone}</td>
-                                    <td>{item.user_address}</td>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>Rs. {item.price}</td>
+                                    <td>{item.user.user_name}</td>
+                                    <td>{item.user.user_phone}</td>
+                                    <td>{item.user.user_address}</td>
+                                    <td>{item.menu.id}</td>
+                                    <td>{item.menu.name}</td>
+                                    <td>Rs.{item.price}</td>
                                     <td>{item.quantity}</td>
                                     <td>{item.date}</td>
                                     <td>{item.token_num}</td>
                                 </tr>
                             ))}
                             <tr>
-                                <td colSpan={2}>Total Price</td>
-                                <td>100</td>
+                                <td colSpan={2}><b>Total Price</b></td>
+                                <td><b>{total}</b></td>
                             </tr>
                         </tbody>
                     </table>
@@ -135,7 +148,7 @@ const View_Order = () => {
                             <label htmlFor="floatingSelect">Status</label>
                         </div>
                         <button
-                            onClick={(e) => updateOrderStatus(e, token_num, user_id)}
+                            onClick={(e) => updateOrderStatus(e,user_id, token_num)}
                             className="btn btn-success text-white"
                         >
                             Update

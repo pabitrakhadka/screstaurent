@@ -1,76 +1,92 @@
-import { db } from "@/db";
+import prisma from "@/db/db.config";
+import { adminSchema } from './fieldValidate/index.js';
+import { hashPassword, verifyPassword } from "./validate/hash.js";
 
 export default async function handler(req, res) {
-    try {
-        if (req.method === 'GET') {
-            const { id } = req.query;
-            const { email, password } = req.query;
-            if (id) {
-                db.getIdAdmin(id).then(({ result }) => {
-                    res.status(200).json({ status: true, message: "fetch Admin data", result });
-                }).catch((error) => {
-                    res.status(200).json({ status: false, message: "sql error", error });
-                })
-            }
-            else if (email && password) {
+  try {
+    if (req.method === 'POST') {
+      const { error, value } = adminSchema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+      const { name, email, phone, password } = value; // Destructure from 'value'
 
-                db.checkAdmin(email, password).then(({ result }) => {
-                    console.log("rd ", result);
-                    res.status(200).json({ status: true, message: "succss", result });
-                }).catch(({ error }) => {
-                    res.status(200).json({ status: false, message: "Error", error });
+      const findAdmin = await prisma.admin.findUnique({
+        where: { email: email }
+      });
+      if (findAdmin) {
+        return res.status(400).json({ status: 400, message: "Email already taken. Please choose another Email." });
+      }
 
-                })
-            }
-            else {
-                db.getAdminData().then(({ result }) => {
-                    res.status(200).json({ status: true, message: "Fetch admin data ", result });
+      const addAdmin = await prisma.admin.create({
+        data: {
+          name: name,
+          email: email,
+          phone: phone, // Corrected property name
+          password: hashPassword(password)
+        },
+      });
 
-                }).catch((error) => {
-                    res.status(200).json({ status: false, message: "sql error", error });
-
-                })
-            }
-
-        }
-
-        else if (req.method === 'POST') {
-            const { name, email, phone, password } = req.body;
-
-            db.addAdmin(name, email, phone, password).then((result) => {
-
-                res.status(200).json({ status: true, message: "Admin Added Sucessfully", result })
-
-            }).catch((error) => {
-                res.status(500).json({ status: false, message: "Internal Server Error" })
-            })
-
-        }
-        else if (req.method === 'PUT') {
-            const { id } = req.query;
-            const { name, phone, email, password } = req.body;
-            console.log("id,name,phone,emaill,password", id, name, phone, email, password);
-
-            db.updateAdminData(name, phone, email, password, id).then(({ result }) => {
-                res.status(200).json({ status: true, message: "Data Updated", result });
-
-            }).catch((error) => {
-                res.status(200).json({ status: false, message: "Server Error", error });
-
-            })
-        }
-
-        else if (req.method === 'DELETE') {
-            const { id } = req.query;
-
-            db.deleteAdmin(id).then((result) => {
-                res.status(200).json({ status: true, message: "Delete Successful", result });
-            }).catch((error) => {
-                res.status(500).json({ status: false, message: "Error", error });
-            })
-        }
-
-    } catch (error) {
-        res.status(200).json({ message: "Method not Allow" });
+      return res.status(200).json({ status: 200, data: addAdmin, message: "Admin is Added successfully." });
     }
+    else if (req.method === "GET") {
+      try {
+        const id = parseInt(req.query.id);
+        if (id) {
+          const data = await prisma.admin.findMany({
+            where: { id: id }, // Corrected property name
+            select: { 
+              id:true,// Added 'select' for correct syntax
+              name: true,
+              email: true,
+              phone:true
+            }
+          });
+          return res.status(200).json({ status: 200, data: data });
+        }
+        const data = await prisma.admin.findMany({
+          select: {
+            id:true,
+            name:true,
+            email: true,
+            phone:true
+             
+          }
+        });
+
+        if (!data || data.length === 0) {
+          return res.status(200).json({ message: 'No Record Found' });
+        }
+
+        res.status(200).json({ data });
+      } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ status: 500, error: 'Internal Server Error' });
+      }
+    } else if (req.method === "PUT") {
+      const id = parseInt(req.query.id);
+      const { error, value } = adminSchema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+      const { name, email, phone, password } = value; // Destructure from 'value'
+
+      const updateAdmin = await prisma.admin.update({
+        where: { id: id },
+        data: {
+          name: name,
+          email: email,
+          phone: phone,
+          password: hashPassword(password)
+        }
+      });
+      return res.status(200).json({ status: 200, data: updateAdmin, message: "Admin is Updated successfully." });
+    }else if(req.method==='DELETE')
+    {
+       
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ status: 500, error: 'Internal Server Error' });
+  }
 }

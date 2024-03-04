@@ -75,9 +75,9 @@ const menu = () => {
   const loaddata = async () => {
     try {
 
-      const res = await axios.get("/api/products");
-      if (res.data.status) {
-        setItem(res.data.result);
+      const res = await axios.get("/api/product");
+      if (res.status===200) {
+        setItem(res.data);
         
       }
     } catch (errror) {

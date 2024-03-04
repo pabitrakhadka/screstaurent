@@ -12,6 +12,7 @@ const Login = () => {
   const [authState, setAuthState] = useState({
     email: "",
     password: "",
+    loginType:""
   });
   const [pageState, setPageState] = useState({
     error: "",
@@ -30,9 +31,11 @@ const Login = () => {
   };
 
   const handleAuth = async () => {
+    authState.loginType="user";
     setPageState((old) => ({ ...old, processing: true, error: "" }));
     try {
       const response = await signIn("credentials", {
+       
         ...authState,
         redirect: false,
       });

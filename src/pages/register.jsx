@@ -24,14 +24,11 @@ const register = () => {
       initialValues: initialValues,
       validationSchema: signUpSchemas,
       onSubmit: async (values) => {
-
         const res = await axios.post(
-          "/api/users",
+          "api/user",
           values
         );
-
-
-        if (res.data.status) {
+        if (res.status===200) {
           toast.success(`${res.data.message}`, {
             position: "top-right",
             autoClose: 1000,
@@ -46,7 +43,6 @@ const register = () => {
             router.push("/login");
           }, 3000)
         } else {
-
           toast.error(`${res.data.message}`, {
             position: "top-right",
             autoClose: 1000,
@@ -56,8 +52,6 @@ const register = () => {
             draggable: false,
             theme: "colored",
           });
-
-
         }
       }
     })

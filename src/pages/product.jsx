@@ -20,8 +20,8 @@ const product = () => {
 
       if (confirm("Do You Want to Delete !")) {
         const res = await axios.delete(
-          `/api/products?id=${id}`);
-        if (res && res.data.status) {
+          `/api/product?id=${id}`);
+        if (res && res.status===200) {
           const updatedProducts = data.filter((product, i) => i !== index);
           setData(updatedProducts);
           toast.success(`${res.data.message}`, {
@@ -56,10 +56,10 @@ const product = () => {
 
   const loaddata = async () => {
     try {
-      const res = await axios.get("/api/products");
-      console.log(res.data);
-      if (res.data.status) {
-        setData(res.data.result);
+      const res = await axios.get("/api/product");
+      
+      if (res.status===200) {
+        setData(res.data);
       }
     } catch (error) {
       console.log(error);

@@ -20,64 +20,51 @@ import Khalti from './Khalti';
 
 
 
+
 const initialValues = {
     name: "",
     phone: "",
     email: "",
     location: "",
 };
-const CheckOuts = () => {
 
+
+const CheckOuts = () => {
+const { data: session, status } = useSession();
+    useEffect(()=>{
+
+    },[session?.user?.email])
+    
     const [showKhalti, setShowKhalti] = useState('');
 
     const handlePaymentClick = async (value) => {
         if (value === 'khalti') {
+
+            console.log("Ammount =", sum);
             const khaltiob = {
                 "return_url": "http://localhost:3000/CheckOuts",
                 "website_url": "http://localhost:3000/",
-                "amount": 800.0,
+                "amount": (sum*100),
                 "purchase_order_id": "101",
                 "purchase_order_name": "ram",
                 "customer_info": {
-                    "name": "Ashim Upadhaya",
-                    "email": "example@gmail.com",
-                    "phone": "9811496763"
+                    "name": `${values.name}`,
+                    "email": `${values.email}`,
+                    "phone": `${values.phone}`
                 },
-
-                "amount_breakdown": [
-                    {
-                        "label": "Mark Price",
-                        "amount": 1000
-                    },
-                    {
-                        "label": "VAT",
-                        "amount": 300
-                    }
-                ],
-                "product_details": [
-                    {
-                        "identity": "1234567890",
-                        "name": "Khalti logo",
-                        "total_price": 1300,
-                        "quantity": 1,
-                        "unit_price": 1300
-                    }
-                ]
             }
 
             const rs = await axios.post('https://a.khalti.com/api/v2/epayment/initiate/', khaltiob, {
                 headers: {
-                    'Authorization': "Key c3349ccb7bd94bd0bd2a167f707c18c2"
+                    'Content-Type': 'application/json',
+                    'Authorization': "key c14ac25061a7424cb36ed785426934cf"
                 }
             });
+
             if (rs.status === 200) {
                 window.location.href = rs.data.payment_url;
-                // console.log('Res data: ', rs.data);
-                // console.log(rs);
-                // console.log('ckhad');
                 setStep(3);
             }
-
 
         }
         else if (value === 'esewa') {
@@ -92,23 +79,19 @@ const CheckOuts = () => {
 
     };
     const [orderItem, setOrderItem] = useState([]);
+    
 
-    const [sum, setSum] = useState(0);
-    const { data: session, status } = useSession();
+    const [sum, setSum] = useState();
     const loadUserData = async () => {
-
-        const res = await axios.get('/api/GetOneUser');
-
-        if (res.data.success);
-        {
-
-            values.name = res.data.result[0].user_name;
-            values.email = res.data.result[0].user_email;
-            values.phone = res.data.result[0].user_phone;
-
+        const res = await axios.get(`/api/user_data`);
+        if (res.status === 200) {
+            values.name = res.data.user_name;
+            values.email = res.data.user_email;
+            values.phone = res.data.user_phone;
+          
+ 
         }
     }
-
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
         useFormik({
             initialValues: initialValues,
@@ -119,20 +102,13 @@ const CheckOuts = () => {
                 // console.log("k ho data ", values)
                 // const res = await axios.post('api/', values);
                 // console.log(res.data);
+                console.log(values);
 
             }
         });
-    const calculatedToatal = () => {
-        setTimeout(() => {
-            let total = 0;
-            if (orderItem.length > 0) {
-                orderItem.map((item, index) => {
-                    total += item.price * item.quantity;
-                });
-            }
-            setSum(total);
-        }, 1000)
-    };
+       
+ 
+     
     const loadOrder_data = () => {
         const data = JSON.parse(localStorage.getItem('order_itms'));
         setOrderItem(data);
@@ -140,14 +116,26 @@ const CheckOuts = () => {
     }
     const router = useRouter();
 
+    const calculatedTotal = () => {
+        let total = 0;
+        if (orderItem.length > 0) {
+            orderItem.forEach((item) => {
+                total += item.price * item.quantity;
+            });
+        }
+        console.log("total price",total,sum);
+        setSum(total);
+    };
 
 
     useEffect(() => {
-        calculatedToatal();
         loadUserData();
-        loadOrder_data()
-
+        loadOrder_data();
+        
     }, []);
+    useEffect(()=>{
+        calculatedTotal();
+    },[orderItem]);
     const [step, setStep] = useState(0);
 
     const validateForm = () => {
@@ -186,24 +174,25 @@ const CheckOuts = () => {
             setStep(3);
         }
         else if (step == 3) {
-            // console.log("step:3", step);
+           
             const submitOrder = async () => {
 
-                const respond = await axios.put('/api/users', values);
-                const res = await axios.post('/api/order_details', orderItem);
-                // console.log("order data", orderItem);
+           const respond = await axios.put(`/api/user?id=${session?.user?.email}`, values);
+        const res = await axios.post('/api/order', orderItem);
+             
+              
 
-                if (res.data.status && respond.data.status) {
+                if (res.status===200 && respond.status===200) {
 
-                    const token_num = res.data.token_num;
-                    // Create a new object with the token_num property
-                    const tokenObject = {
-                        token_num: token_num
-                    };
+                //     const token_num = res.data.token_num;
+                //     // Create a new object with the token_num property
+                //     const tokenObject = {
+                //         token_num: token_num
+                //     };
 
-                    // Push the tokenObject to the parsedProducts array
-                    orderItem.push(tokenObject);
-                    // console.log('Order ITem:', orderItem);
+                //     // Push the tokenObject to the parsedProducts array
+                //     orderItem.push(tokenObject);
+                //     // console.log('Order ITem:', orderItem);
 
                     toast.success("Thanks You For Order", {
                         position: "top-right",

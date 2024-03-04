@@ -12,7 +12,9 @@ const admins = () => {
   const load = async () => {
     try {
       const res = await axios.get("/api/admin");
-      setAdmin(res.data.result);
+      setAdmin(res.data.data);
+      
+
     } catch (error) {
       console.log(error);
     }
@@ -92,38 +94,33 @@ const admins = () => {
           </tr>
         </thead>
         <tbody>
-          {admin && admin.map((admin, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{admin.name}</td>
-                <td>{admin.email}</td>
-                <td>{admin.phone}</td>
-                <td>**********</td>
-                <td>
-                  <button
-                    onClick={() => {
-                      editAdmin(admin.id);
-                    }}
-                    className="btn bg-success text-white"
-                  >
-                    Edit
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className="btn btn bg-danger text-white"
-                    onClick={() => {
-                      deleteAdmin(admin.id, index);
-                    }}
-                    type="button"
-                  >
-                    <i className="bi bi-trash3"></i>
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+        {admin.map((adminData, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{adminData.name}</td>
+              <td>{adminData.email}</td>
+              <td>{adminData.phone}</td>
+              <td>**********</td>
+              <td>
+                <button
+                  onClick={() => {
+                    editAdmin(adminData.id);
+                  }}
+                >
+                  Edit
+                </button>
+              </td>
+              <td>
+                <button
+                  onClick={() => {
+                    deleteAdmin(adminData.id, index);
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
 

@@ -43,13 +43,15 @@ const UserOrder = () => {
     return Object.values(groupedData);
   }
   const loadOrderItems = async () => {
-    const res = await axios.get("/api/View_Order");
-    if (res.data.status) {
-
-      const orders = groupBy(res.data.result);
+    const res = await axios.get("/api/viewOrder");
+    if (res.status===200) {
+console.log(res.data);
+      const orders = groupBy(res.data);
       console.log("order:", orders);
       setOrderItem(orders);
       console.log(orderItem);
+    }else{
+      console.log("Error");
     }
   }
 
@@ -103,7 +105,7 @@ const UserOrder = () => {
                           <React.Fragment key={index}>
                             {itemGroup.map((item, itemIndex) => (
                               <tr key={itemIndex}>
-                                <td>{item.name}</td>
+                                <td>{item.menu.name}</td>
                                 <td> {item.price}</td>
                                 <td>{item.quantity}</td>
                                 <td>RS. {item.price * item.quantity}</td>

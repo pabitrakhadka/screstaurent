@@ -262,7 +262,7 @@ const Cart = () => {
 
         {!session?.user?.name && <>
           <div className="notLogin">
-            <NotLogin />
+            <NotLogin type="user" />
           </div>
         </>}
       </Layout>
