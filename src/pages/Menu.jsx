@@ -105,7 +105,7 @@ const menu = () => {
                   <div className="special_item">
                     <div className="image">
                       <img
-                        src={`./images/${item.image}`}
+                        src={`/uploads/${item.image}`}
                         alt={item.description}
                       />
                     </div>
@@ -139,7 +139,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`./images/${item.image}`}
+                          src={`/uploads/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -172,7 +172,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`./images/${item.image}`}
+                          src={`/uploads/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -205,7 +205,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`./images/${item.image}`}
+                          src={`/uploads/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -238,7 +238,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`./images/${item.image}`}
+                          src={`/uploads/${item.image}`}
                           alt={item.description}
                         />
                       </div>

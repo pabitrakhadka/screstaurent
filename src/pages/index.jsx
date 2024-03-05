@@ -30,7 +30,7 @@ const divStyle = {
   width: "100%",
 };
 
-const slideImages = [
+const slideuploads = [
   {
     url: "https://media.istockphoto.com/id/1316145932/photo/table-top-view-of-spicy-food.jpg?s=170667a&w=0&k=20&c=fx-caeGfzahlZarBeZ_3Jl43xO85t2cs3dmIS4b4FL0=",
   },
@@ -97,7 +97,7 @@ export default function Home() {
         </div> */}
         <div className="slide-container">
           <Slide>
-            {slideImages.map((slideImage, index) => (
+            {slideuploads.map((slideImage, index) => (
               <div key={index}>
                 <div
                   style={{
@@ -163,7 +163,7 @@ export default function Home() {
                   <div className="special_item">
                     <div className="image">
                       <img
-                        src={`/images/${item.image}`}
+                        src={`/uploads/${item.image}`}
                         alt={item.description}
                       />
                     </div>
@@ -265,7 +265,7 @@ export default function Home() {
           <div className="chef_row">
 
             <div className="card box_border">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
+              <img src="https://uploads.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
               <div className="card-body">
                 <div className="links flex">
                   <li>  <Link href='/'><i className="bi bi-facebook"></i></Link></li>
@@ -278,7 +278,7 @@ export default function Home() {
 
 
             <div className="card box_border"  >
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
+              <img src="https://uploads.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
               <div className="card-body">
                 <div className="links flex">
                   <li>  <Link href='/'><i className="bi bi-facebook"></i></Link></li>
@@ -290,7 +290,7 @@ export default function Home() {
 
 
             <div className="card box_border" >
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
+              <img src="https://uploads.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGh1bWFufGVufDB8fDB8fA%3D%3D&w=1000&q=80" className="card-img-top" alt="..." />
               <div className="card-body">
                 <div className="links flex">
                   <li>  <Link href='/'><i className="bi bi-facebook"></i></Link></li>

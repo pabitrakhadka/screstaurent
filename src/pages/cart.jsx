@@ -17,7 +17,7 @@ const Cart = () => {
   const allDelete = () => {
     const text = "Do You Yant to All Cart Delete";
     if (confirm(text) == true) {
-      localStorage.removeItem(`${session.user.name}`);
+      localStorage.removeItem(`${session.user.name && session?.user?.image==='user'}`);
       setCartItems([]);
       toast.error("Deleted ?!", {
         position: "top-right",
@@ -56,7 +56,7 @@ const Cart = () => {
   const updateQuantity = (index, value) => {
     const data = [...cartItems];
     data[index].quantity = value;
-    localStorage.setItem(`${session.user.name}`, JSON.stringify(data));
+    localStorage.setItem(`${session.user.name&& session?.user?.image==='user'}`, JSON.stringify(data));
     setCartItems(data);
     calculateSum();
 
@@ -84,7 +84,7 @@ const Cart = () => {
       console.log(index, value);
       const data = [...cartItems];
       data[index].quantity = value;
-      localStorage.setItem(`${session.user.name}`, JSON.stringify(data));
+      localStorage.setItem(`${session.user.name&& session?.user?.image==='user'}`, JSON.stringify(data));
       setCartItems(data);
       calculateSum();
     } else {
@@ -92,7 +92,7 @@ const Cart = () => {
       console.log(index, value);
       const data = [...cartItems];
       data[index].quantity = value;
-      localStorage.setItem(`${session.user.name}`, JSON.stringify(data));
+      localStorage.setItem(`${session.user.name && session?.user?.image==='user'}`, JSON.stringify(data));
       setCartItems(data);
       calculateSum();
     }
@@ -103,7 +103,7 @@ const Cart = () => {
     console.log(index, value);
     const data = [...cartItems];
     data[index].quantity = value;
-    localStorage.setItem(`${session.user.name}`, JSON.stringify(data));
+    localStorage.setItem(`${session.user.name && session?.user?.image==='user'}`, JSON.stringify(data));
     setCartItems(data);
     calculateSum();
   }
@@ -118,19 +118,19 @@ const Cart = () => {
     }, 100);
   };
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(`${session?.user?.name}`));
+    const data = JSON.parse(localStorage.getItem(`${session?.user?.name && session?.user?.image==='user'}`));
     setCartItems(data);
     calculateSum();
-    console.log(session);
-  }, [session]);
+    
+  }, [session?.user?.email==='user']);
 
   const checkClick = (id, index, name) => {
     const text = "Are you sure !";
     if (confirm(text) == true) {
       console.log(id, index, name);
-      let data = JSON.parse(localStorage.getItem(`${session.user.name}`));
+      let data = JSON.parse(localStorage.getItem(`${session.user.name&& session?.user?.image==='user'}`));
       data.splice(index, 1);
-      localStorage.setItem(`${session.user.name}`, JSON.stringify(data)); // convert array back to string and save in local storage
+      localStorage.setItem(`${session.user.name&& session?.user?.image==='user'}`, JSON.stringify(data)); // convert array back to string and save in local storage
       setCartItems(data);
       calculateSum();
       console.log(data);
@@ -150,7 +150,7 @@ const Cart = () => {
     <>
       <Layout>
         <ToastContainer />
-        {session?.user?.name && (
+        {session?.user?.name && session?.user?.image==='user' && (
           <>
             <div className="cart view p-4">
               <h1>My Cart</h1>
@@ -260,7 +260,7 @@ const Cart = () => {
           </>
         )}
 
-        {!session?.user?.name && <>
+        {!session?.user?.name && !session?.user?.image==='user'&& <>
           <div className="notLogin">
             <NotLogin type="user" />
           </div>

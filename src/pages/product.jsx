@@ -106,8 +106,9 @@ const product = () => {
                     <td>{item.description}</td>
                     <td className="priduct_imagedisplay">
                       <Image
-                        src={`/images/${item.image}`}
-                        alt={item.description}
+                         
+                         src={`/uploads/${item.image}`}
+                        alt={item.image}
                         width={70}
                         height={70}
                       />
