@@ -2,7 +2,7 @@ import prisma from "@/db/db.config.js";
 import multer from "multer";
 
 // Define the destination directory for uploads
-const uploadDirectory = "/tmp/uploads";
+const uploadDirectory = "./public/images";
 const storage = multer.diskStorage({
     destination: uploadDirectory,
     filename: (req, file, cb) => {

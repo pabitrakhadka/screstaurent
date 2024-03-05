@@ -163,7 +163,7 @@ export default function Home() {
                   <div className="special_item">
                     <div className="image">
                       <img
-                        src={`/uploads/${item.image}`}
+                        src={`/images/${item.image}`}
                         alt={item.description}
                       />
                     </div>

@@ -24,26 +24,39 @@ const register = () => {
       initialValues: initialValues,
       validationSchema: signUpSchemas,
       onSubmit: async (values) => {
-        const res = await axios.post(
-          "api/user",
-          values
-        );
-        if (res.status===200) {
-          toast.success(`${res.data.message}`, {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "colored",
-          });
-
-          setTimeout(() => {
-            router.push("/login");
-          }, 3000)
-        } else {
-          toast.error(`${res.data.message}`, {
+        try {
+          const res = await axios.post("api/user", values);
+      
+          if (res.status === 200) {
+            toast.success(`${res.data.message}`, {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            });
+      
+            setTimeout(() => {
+              router.push("/login");
+            }, 2000);
+          }  
+            else {
+            console.error("Unexpected response:", res);
+            toast.error("Unexpected response from server", {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            });
+          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          toast.error("Error submitting form", {
             position: "top-right",
             autoClose: 1000,
             hideProgressBar: true,

@@ -19,7 +19,7 @@ const dashboard = () => {
   };
 
   useEffect(() => {
-    if (session) {
+    if (session?.user?.image==='admin') {
       loadData();
     }
   }, []);
@@ -34,7 +34,7 @@ const dashboard = () => {
   }, [count]);
   return (
     <>
-      {session?.user?.name && (
+      {session?.user?.image==='admin' && (
         <Dlayout>
           <ToastContainer />
           <div className="dashboard_firstRow">
@@ -152,7 +152,7 @@ const dashboard = () => {
           </div>
         </Dlayout>
       )}
-      {!session?.user?.name && (
+      {!session?.user?.image==='admin' && (
         <>
           <div className="notLogin">
             <NotLogin type="admin" />

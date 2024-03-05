@@ -24,7 +24,7 @@ const Dlayout = ({ children }) => {
   };
   return (
     <>
-   {session?.user?.name && (
+   {session?.user?.image==='admin' && (
    <>
    <ToastContainer/>
    <div className="dashboards">
@@ -163,7 +163,7 @@ const Dlayout = ({ children }) => {
   </>
   )} 
       
-  {!session?.user?.name && <>
+  {!session?.user?.email==="admin" && <>
     <div className="notLogin">
       <NotLogin type="admin" />
     </div>

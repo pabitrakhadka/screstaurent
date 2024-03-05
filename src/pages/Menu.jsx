@@ -39,7 +39,7 @@ const menu = () => {
       const cartItem = { id, name, price, quantity: 1 };
       let isNew = true;
       const data =
-        JSON.parse(localStorage.getItem(`${session.user.name}`)) || [];
+        JSON.parse(localStorage.getItem(`${session.user.name&& session?.user?.image==='user'}`)) || [];
       data.map((obj, i) => {
         if (obj.id === id) {
           data[i].quantity += parseInt(cartItem.quantity);
@@ -49,7 +49,7 @@ const menu = () => {
       if (isNew) {
         data.push(cartItem);
       }
-      localStorage.setItem(`${session.user.name}`, JSON.stringify(data));
+      localStorage.setItem(`${session.user.name && session?.user?.image==='user'}`, JSON.stringify(data));
       toast.success("Success Cart Added!", {
         position: "top-right",
         autoClose: 1000,
@@ -105,7 +105,7 @@ const menu = () => {
                   <div className="special_item">
                     <div className="image">
                       <img
-                        src={`/uploads/${item.image}`}
+                        src={`./images/${item.image}`}
                         alt={item.description}
                       />
                     </div>
@@ -139,7 +139,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`/uploads/${item.image}`}
+                          src={`./images/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -172,7 +172,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`/uploads/${item.image}`}
+                          src={`./images/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -205,7 +205,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`/uploads/${item.image}`}
+                          src={`./images/${item.image}`}
                           alt={item.description}
                         />
                       </div>
@@ -238,7 +238,7 @@ const menu = () => {
                     <div className="special_item">
                       <div className="image">
                         <img
-                          src={`/uploads/${item.image}`}
+                          src={`./images/${item.image}`}
                           alt={item.description}
                         />
                       </div>

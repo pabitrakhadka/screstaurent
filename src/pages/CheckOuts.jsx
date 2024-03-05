@@ -33,7 +33,7 @@ const CheckOuts = () => {
 const { data: session, status } = useSession();
     useEffect(()=>{
 
-    },[session?.user?.email])
+    },[session?.user?.image==='user'])
     
     const [showKhalti, setShowKhalti] = useState('');
 

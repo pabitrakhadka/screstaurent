@@ -31,6 +31,8 @@ export default NextAuth({
            
               const user = res.data;
               user.email = user.id;
+              user.image = "user";
+              
               user.name = user.name;
               return user;
             } else {
@@ -40,10 +42,11 @@ export default NextAuth({
           } else if (loginType === "admin") {
             const res = await axios.post(`${url}/adminlogin`, { email, password });
             if (res.status === 200) {
-              const admin = res.data;
-              admin.email = admin.id;
-              admin.name = admin.name;
-              return admin;
+              const user = res.data;
+              user.email = user.id;
+              user.image = "admin";
+              user.name = user.name;
+              return user;
             } else {
              
               return null;

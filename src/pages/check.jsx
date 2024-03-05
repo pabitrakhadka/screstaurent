@@ -9,8 +9,9 @@ const check = () => {
       <div className="details">
         {console.log(session)}
         <p>Name: {session.user.name}</p>
-
         <p>email: {session.user.email}</p>
+        <p>Role {session.user.image}</p>
+
       </div>
     );
   } else {

@@ -97,7 +97,7 @@ const Nav = () => {
                       Order
                     </Link>
                   </li>
-                  {session ? (
+                  {session?.user?.image==='user' ? (
                     <li className="nav-item">
                       <button className="nav-link" onClick={logout}>
                         Logout
@@ -117,7 +117,7 @@ const Nav = () => {
                   )}
                 </ul>
               </div>
-              {session ? (
+              {session?.user?.image==='user'? (
                 ""
               ) : (
                 <>
