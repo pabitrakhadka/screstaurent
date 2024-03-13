@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  phone      String
+  password   String
+  created_at DateTime @default(now())
+  token      String?
+  image     String?
+}
+
+model User {
+  user_id       Int             @id @default(autoincrement())
+  user_name     String?
+  user_phone    String?
+  user_address  String?
+  user_email    String          @unique
+  user_password String?
+  location      String?
+  user_token    String?
+  user_otp      String?
+  order         Order[]
+  orderdata     OrderUserData[]
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  price       Int
+  description String
+  image       String
+  category    String
+  special     String
+  orders      Order[]
+}
+
+model Contact {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String
+  subject String
+  message String
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  menu      Product  @relation(fields: [menu_id], references: [id])
+  user      User     @relation(fields: [user_id], references: [user_id])
+  menu_id   Int
+  user_id   Int
+  price     String
+  quantity  String
+  status    String
+  token_num String
+  date      DateTime @default(now())
+}
+
+model OrderUserData {
+  id      Int      @id @default(autoincrement())
+  user    User     @relation(fields: [user_id], references: [user_id])
+  user_id Int
+  name    String
+  address String
+  phone   String
+  email   String
+  date    DateTime @default(now())
+}

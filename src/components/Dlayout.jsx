@@ -89,65 +89,65 @@ const Dlayout = ({ children }) => {
         <div className=" listgroup_background">
           <ul className="dashullist">
             <li>
-              <Link href="/dashboard" className="list_item  ">
+              <Link href="admin/" className="list_item  ">
                 <i className="bi bi-house-dash"></i> Dashboard
               </Link>
             </li>
             <li>
-              <Link href="/admins" className="list_item ">
+              <Link href="admin/admins" className="list_item ">
                 <i className="bi bi-person-check-fill"></i> Admins
               </Link>
             </li>
             <li>
-              <Link href="/users" className="list_item">
+              <Link href="admin/users" className="list_item">
                 <i className="bi bi-people-fill"></i> Users
               </Link>
             </li>
             <li>
-              <Link href="/product" className="list_item ">
+              <Link href="admin/product" className="list_item ">
                 <i className="bi bi-pie-chart-fill"></i> Product
               </Link>
             </li>
             <li>
-              <Link href="/order" className="list_item">
+              <Link href="admin/order" className="list_item">
                 <i className="bi bi-record-circle"></i>Order
               </Link>
             </li>
 
             <li>
-              <Link href="/Chat" className="list_item">
+              <Link href="admin/Chat" className="list_item">
                 <i className="bi bi-cart-check"></i>Chat
 
               </Link>
             </li>
             <li>
-              <Link href="/todaySpecial" className="list_item">
+              <Link href="admin/todaySpecial" className="list_item">
                 <i className="bi bi-menu-button-fill"></i>Today Specaial
               </Link>
             </li>
             <li>
-              <Link href="/specialMenu" className="list_item">
+              <Link href="admin/specialMenu" className="list_item">
                 <i className="bi bi-menu-button-fill"></i>Special Menu
               </Link>
             </li>
             <li>
-              <Link href="/contact_details" className="list_item">
+              <Link href="admin/contact_details" className="list_item">
                 <i className="bi bi-person-lines-fill"></i>Contact
               </Link>
             </li>
             <li>
-              <Link href="/Chef" className="list_item">
+              <Link href="admin/Chef" className="list_item">
                 <i className="bi bi-person-lines-fill"></i>Add Chef
               </Link>
             </li>
             <li>
-              <Link href="/profile" className="list_item">
+              <Link href="admin/profile" className="list_item">
                 <i className="bi bi-person"></i>Profile
               </Link>
             </li>
             <li>
               <Link
-                href="/profile"
+                href="admin/profile"
                 className="list_item "
                 onClick={logoutBtn}
               >
@@ -163,11 +163,11 @@ const Dlayout = ({ children }) => {
   </>
   )} 
       
-  {!session?.user?.email==="admin" && <>
-    <div className="notLogin">
-      <NotLogin type="admin" />
-    </div>
-  </>}
+      {/* {!(session?.user?.email === "admin") && (
+  <div className="notLogin">
+    <NotLogin type="admin" />
+  </div>
+)} */}
  </>
   );
 };

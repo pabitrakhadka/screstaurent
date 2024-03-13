@@ -17,7 +17,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { set } from 'react-hook-form';
 import Khalti from './Khalti';
-
+import crypto from 'crypto';
+ 
 
 
 
@@ -30,6 +31,26 @@ const initialValues = {
 
 
 const CheckOuts = () => {
+
+    const router = useRouter();
+    const [isCompleted, setIsCompleted] = useState(false);
+
+    const parseQueryParams = () => {
+        
+       
+
+        const { pidx, transaction_id, tidx, amount, total_amount, mobile, status, purchase_order_id, purchase_order_name } = router.query;
+        console.log("status=",status);
+        // Example conditions, you can adjust them based on your requirements
+        if (status === 'Completed') {
+            
+                setStep(3);
+           
+        }
+      };
+      useEffect(() => {
+        parseQueryParams();
+      }, []);
 const { data: session, status } = useSession();
     useEffect(()=>{
 
@@ -40,7 +61,7 @@ const { data: session, status } = useSession();
     const handlePaymentClick = async (value) => {
         if (value === 'khalti') {
 
-            console.log("Ammount =", sum);
+            
             const khaltiob = {
                 "return_url": "http://localhost:3000/CheckOuts",
                 "website_url": "http://localhost:3000/",
@@ -54,23 +75,62 @@ const { data: session, status } = useSession();
                 },
             }
 
-            const rs = await axios.post('https://a.khalti.com/api/v2/epayment/initiate/', khaltiob, {
+            const rs = await axios.post(process.env.KHALTI_API, khaltiob, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': "key c14ac25061a7424cb36ed785426934cf"
+                    'Authorization': `key ${process.env.KHALTI_KEY}`
                 }
             });
 
             if (rs.status === 200) {
                 window.location.href = rs.data.payment_url;
-                setStep(3);
+                
             }
 
         }
         else if (value === 'esewa') {
-            const esewaPayment = () => {
-
-            }
+           
+                const generateSignature = (message) => {
+                    const sicret = "8gBm/:&EnhH.1/q";
+                    const hmac = crypto.createHmac("sha256", sicret);
+                    hmac.update(message);
+                    var hashInBase64 = hmac.digest('base64');
+                    return hashInBase64;
+                  }
+                  const signature = generateSignature('110,test,EPAYTES');
+                
+                  const formData = {
+                    amount: "100",
+                    failure_url: "http://localhost:3000/esewa",
+                    product_delivery_charge: "0",
+                    product_service_charge: "0",
+                    product_code: "EPAYTEST",
+                    signature: `${signature}`,
+                    signed_field_names: "total_amount,transaction_uuid,product_code",
+                    success_url: "http://localhost:3000/check",
+                    tax_amount: "10",
+                    total_amount: "110",
+                    transaction_uuid: "ab14a8f2b02c3"
+                  };
+                  const headers = {
+                    "Content-Type": "application/json"
+                  };
+                  try {
+                    // Using a CORS proxy service
+                    const res =  await axios.post(
+                      'https://rc-epay.esewa.com.np/api/epay/main/v2/form',
+                      formData,
+                      { headers: headers }
+                    );
+                    if (res.status === 200) {
+                      console.log('success');
+                    } else {
+                      console.log('error');
+                    }
+                  } catch (error) {
+                    console.error('Error:', error);
+                  }
+      
 
         } else {
             alert("SELEct Payment Method");
@@ -114,7 +174,7 @@ const { data: session, status } = useSession();
         setOrderItem(data);
 
     }
-    const router = useRouter();
+ 
 
     const calculatedTotal = () => {
         let total = 0;
@@ -170,9 +230,7 @@ const { data: session, status } = useSession();
                 setStep(1);
             }
         }
-        else if (step == 2) {
-            setStep(3);
-        }
+      
         else if (step == 3) {
            
             const submitOrder = async () => {

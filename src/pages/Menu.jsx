@@ -19,23 +19,29 @@ const menu = () => {
     setCurrent(menuItem);
   };
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  //   function checkUser(id,name,price) {
+  //   if(session?.user?.name&& session?.user?.image==='user')
+  //   {
+  //     addcart(id,name,price);
+  //   }else{
+  //     toast.error("Please Login!", {
+  //       position: "top-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //       closeOnClick: false,
+  //       pauseOnHover: true,
+  //       draggable: false,
+  //       theme: "colored",
+  //     });
+  //     setTimeout(() => {
+  //       router.push('/login');
+  //     }, 2000)
+  //   }
+  // }
   const addcart = (id, name, price) => {
-    if (!session) {
-      toast.error("Please Login!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: false,
-        theme: "colored",
-      });
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000)
+    if (session?.user?.image === "user" ) {
 
-    } else {
       const cartItem = { id, name, price, quantity: 1 };
       let isNew = true;
       const data =
@@ -49,7 +55,7 @@ const menu = () => {
       if (isNew) {
         data.push(cartItem);
       }
-      localStorage.setItem(`${session.user.name && session?.user?.image==='user'}`, JSON.stringify(data));
+      localStorage.setItem(`${session?.user?.name && session?.user?.image==='user'}`, JSON.stringify(data));
       toast.success("Success Cart Added!", {
         position: "top-right",
         autoClose: 1000,
@@ -59,6 +65,21 @@ const menu = () => {
         draggable: false,
         theme: "colored",
       });
+     
+    } else {
+      toast.error("Please Login!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "colored",
+      });
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000)
+
     }
   };
 

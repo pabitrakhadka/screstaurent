@@ -50,3 +50,9 @@ export const contactform = Yup.object({
   subject: Yup.string().required("Please Enter Subject"),
   message: Yup.string().required("Please Enter Message"),
 });
+export const otp = Yup.object({
+  one:Yup.number().min(1).max(1).required(),
+  two:Yup.number().min(1).max(1).required(),
+  three:Yup.number().min(1).max(1).required(),
+  four:Yup.number().min(1).max(1).required(),
+});

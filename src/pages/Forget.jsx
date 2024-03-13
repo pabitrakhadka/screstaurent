@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useState } from "react";
+import { useState, useRef } from 'react';
 const initialValues = {
     newpassword: "",
     confirm_password: "",
@@ -17,19 +17,35 @@ const Forget = () => {
     const [email, setEmail] = useState("");
     const [currentform, setCurrentform] = useState("forgot");
     const [emails, setUpdateEmail] = useState('');
+    const [otp, setOTP] = useState({ one: '', two: '', three: '', four: '' });
+    const [error, setError] = useState({});
+    const inputTwoRef = useRef(null);
+    const inputThreeRef = useRef(null);
+    const inputFourRef = useRef(null);
 
+    const handleChanges = (e, ref) => {
+        const { name, value } = e.target;
+        setOTP(prevOTP => ({
+            ...prevOTP,
+            [name]: value
+        }));
+
+        // If the value is entered in the current input, focus on the next input
+        if (value && ref) {
+            ref.current.focus();
+        }
+    };
+
+    
 
     //submit email
     const submitEmail = async (e) => {
         e.preventDefault();
         try {
-
-            const res = await axios.post("/api/password", {
-                email,
-            });
-
-            if (res.data.status) {
-
+            console.log(e);
+            const res = await axios.get(`/api/userlogin?email=${email}`);
+            console.log(res.data);
+            if (res.status === 200) {
                 setUpdateEmail(email);
                 toast.success(`${res.data.message}`, {
                     position: "top-right",
@@ -58,73 +74,84 @@ const Forget = () => {
             console.log("Catch ", error);
         }
     };
+    const toastOptions = {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+    };
     const handleEmail = (e) => {
         const value = e.target.value;
         setEmail(value);
     };
-    const [pin, setPin] = useState('');
-
-    const pinSubmit = async (r) => {
-        r.preventDefault();
-
-        const res = await axios.post('/api/checkpin', { pin });
-        console.log(res.data);
-        if (res.data.status) {
-            setUpdateEmail(email);
-            toast.success(`${res.data.message}`, {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "colored",
-            });
-            setTimeout(() => {
-                setCurrentform("changepassword");
-            }, 1000)
-        } else {
-            toast.error(`${res.data.message}`, {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "colored",
-            });
-            setTimeout(() => {
-                setCurrentform("enterpin");
-            }, 1000)
+    const pinSubmit = async (e) => {
+        e.preventDefault();
+       
+        const newErrors = {};
+       
+        for (const key in otp) {
+            if (!otp[key]) {
+                toast.error("Please enter a value", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                });
+            } else if (otp[key].length !== 1 || isNaN(otp[key])) {
+                newErrors[key] = 'Please enter a single digit';
+                toast.error("Please enter a single digit", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                });
+            }
         }
-        // setUpdateEmail(email);
-        // toast.success(`${res.data.message}`, {
-        //     position: "top-right",
-        //     autoClose: 1000,
-        //     hideProgressBar: true,
-        //     closeOnClick: false,
-        //     pauseOnHover: false,
-        //     draggable: false,
-        //     theme: "colored",
-        // });
-        // setTimeout(() => {
-        //     setCurrentform("forgot");
-        // }, 1000)
-
-    }
+        if (Object.keys(newErrors).length === 0) {
+            try {
+                let pin = `${otp.one}${otp.two}${otp.three}${otp.four}`;
+                const response = await axios.post(`/api/userlogin?em=${email}&pin=${pin}`);
+                console.log("email and pin", email, pin);
+                if (response.status === 200) {
+                    setUpdateEmail(email);
+                    toast.success(response.data.message, toastOptions);
+                    setTimeout(() => setCurrentform("changepassword"), 1000);
+                } else {
+                    toast.error(response.data.message, toastOptions);
+                    setTimeout(() => setCurrentform("enterpin"), 1000);
+                }
+                setError({});
+            } catch (error) {
+                console.error("Error submitting PIN:", error);
+                toast.error("Error submitting PIN", toastOptions);
+            }
+        } else {
+            setError(newErrors);
+        }
+    };
+    
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
         useFormik({
             initialValues: initialValues,
             validationSchema: forgotSchema,
             onSubmit: async (values) => {
-                console.log("hello");
+             console.log(values);
                 values.emails = emails;
                 const res = await axios.put(
-                    "/api/password",
+                    "/api/userlogin?changepassword=c",
                     values
                 );
-                if (res.data.status) {
+                if (res.status === 200) {
                     toast.success(`${res.data.message}`, {
                         position: "top-right",
                         autoClose: 1000,
@@ -188,22 +215,61 @@ const Forget = () => {
             case "enterpin":
                 return (
                     <>
-                        <div className="enter_pin_outer">
-                            <div className="enter_pin_inner">
-                                <div className="back_color">
-                                    <div className="center_div">
-                                        Please Enter Your Pin To send Email
-                                    </div>
-                                </div>
-                                <form onSubmit={pinSubmit}>
-                                    <input type="number" required onChange={(e) => setPin(e.target.value)} placeholder="Enter 4 Pin" />
-
-                                    <div className="button">
-                                        <button type="submit" name="pin" className="btn bg-success text-white">Next</button>
-                                    </div>
-                                </form>
+                        <div className="container-fluid m-auto border shadow-sm p-3 mb-5 bg-body rounded w-25">
+                            <div className="image_logo_tick d-flex justify-content-center">
+                                <img className="img-thumbnail border-none outline-none" src="https://img.freepik.com/premium-vector/vector-green-check-mark-icon-symbol-logo-circle-tick-symbol-green-color-vector-illustration_488400-339.jpg" height={100} width={100} alt="" />
                             </div>
+                            <h3 className="text-center">Enter is Send Your Email </h3>
+                            <div class="form-floating mb-3 d-flex">
+                            <input
+                    name="one"
+                    onChange={(e) => handleChanges(e, inputTwoRef)}
+                    value={otp.one}
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    maxLength={1}
+                />
+                <input
+                    ref={inputTwoRef}
+                    name="two"
+                    onChange={(e) => handleChanges(e, inputThreeRef)}
+                    value={otp.two}
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    maxLength={1}
+                />
+                <input
+                    ref={inputThreeRef}
+                    name="three"
+                    onChange={(e) => handleChanges(e, inputFourRef)}
+                    value={otp.three}
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    maxLength={1}
+                />
+                <input
+                    ref={inputFourRef}
+                    name="four"
+                    onChange={handleChanges}
+                    value={otp.four}
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    maxLength={1}
+                />
+                                
+                            </div>
+                            <div className="button d-flex justify-content-center">
+                                <button type="submit" onClick={pinSubmit} className="allbtn btn">
+                                    Continue
+                                </button>
+                            </div>
+
                         </div>
+
                     </>
                 )
             case "changepassword":

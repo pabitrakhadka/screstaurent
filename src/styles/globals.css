@@ -260,7 +260,7 @@ footer {
 
 }
 
-.contact_social_link_box ul li a {}
+ 
 
 
 .contact_social_link_box li a:hover {
@@ -270,6 +270,18 @@ footer {
 /* nava button */
 button {
   border: none;
+}
+.logout_button{
+  border: none;
+  background-color: none;
+}
+.form_inputs{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.form_inputs input{
+  border: 1rem black solid;
 }
 
 .dropdown-menu li a {
@@ -1083,44 +1095,7 @@ ul.nav.nav-pills.category_menus li.nav-link.active {
 }
 
 
-.enter_pin_outer {
-
-
-  display: flex;
-  justify-content: center;
-
-
-}
-
-.enter_pin_inner {
-
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
-}
-
-.enter_pin_inner .back_color {
-  background-color: rgb(81, 81, 233);
-  padding: 1rem;
-  color: white;
-}
-
-.enter_pin_inner form input {
-  padding: 1rem;
-  border: none;
-  outline: none;
-}
-
-.enter_pin_inner .center_div {
-  text-align: center;
-  width: 10rem;
-  margin: auto;
-}
-
-.enter_pin_inner form .button {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  margin: 1rem;
-}
+ 
 
 @media (max-width: 480px) {
   .specialIemrow {
